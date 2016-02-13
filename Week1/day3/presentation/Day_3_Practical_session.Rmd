@@ -1,0 +1,129 @@
+---
+title: "Practical"
+author: "James Mburu"
+date: "February 17, 2016"
+output: beamer_presentation
+header-includes:  
+- \usetheme{CambridgeUS}
+- \useinnertheme{rounded}
+- \usecolortheme{sidebartab}
+- \usefonttheme{professionalfonts}
+- \usepackage{xcolor,soul,hyperref,cite,graphicx,amsmath,verbatim,longtable}
+- \hypersetup{colorlinks,urlcolor=blue}
+linkcolor: blue
+urlcolor: blue
+---
+
+
+```{r library,include=FALSE,warning=FALSE}
+
+lib <- c("epiDisplay", "plyr" , "base", "foreach", "foreign","ggplot2",
+         "grid","dplyr","tidyr","grid","gridExtra","xtable")
+lapply(lib, library, character.only = TRUE)
+
+```
+
+## 
+
+
+\begin{center}
+
+\textbf{Graphical Exploration}\\      
+
+
+\end{center}
+
+
+## Exercise. 1
+
+Draw a box plot to show the distribution of the birth weight(bweight) for the different age groups (agegrp).        
+
+-. Label the titles i.e y, x, and the main title      
+
+-. Change the color of the titles from the default black to a color of your choice.
+
+-. Increase the size of axis titles and  main title
+
+-. save the graph as a .pdf file to a location of your choice        
+
+
+## Exercise. 2
+
+Draw a Grouped bar plot showing the number of kids in each category of lbw grouping them by sex.      
+
+
+-. Label the titles i.e y, x, and the main title      
+
+-. Change the color of the titles from the default black to a color of your choice.
+
+-. Increase the size of axis titles and main title.
+
+-. save the graph as a .png file to a location of your choice    
+
+## Solution 1
+
+\small
+```{r,include=FALSE}
+birth<-read.dta("H:/Jmburu/Class/Data/birthweight2.dta")
+```
+
+
+\small
+```{r,comment=NA}
+bx<-ggplot(birth, aes(x=agegrp, y=bweight, color=agegrp)) +
+    geom_boxplot() + guides(color=FALSE)
+bx<- bx + theme_bw() + labs(title="Birth weight per age group"
+                            ,x="",y="Birth weight(g)")
+bx<- bx + theme(title=element_text(color="blue", size=18),
+  axis.title.y=element_text(size=15,face="bold",color="brown"),
+  axis.text=element_text(size=14) )
+```
+
+```{r,eval=FALSE}
+# Save the plot
+ggsave("H:/Jmburu/boxplot.pdf",plot=bx,width=8,height=6,unit="in")
+
+```
+
+## Solution 1 ... 
+ 
+```{r,echo=FALSE,fig.height=6,fig.width=9}
+bx
+```
+
+
+## Solution 2 ... 
+
+\small
+
+```{r,include=FALSE}
+(Count<-table(birth$lbw,birth$sex))
+Count<- data.frame(Count)
+names(Count)<- c("lbw","sex","count")
+```
+
+
+```{r}
+b<-ggplot(data=Count, aes(x=sex,y=count,fill=lbw))
+b<- b + geom_bar(stat="identity",width=.5,position ="dodge") +
+    theme_bw()
+b<- b + labs(title="Grouped Bar Plot",x="Sex",y="Counts") 
+b<- b + theme(legend.key=element_blank(),
+           legend.title=element_blank(),
+           legend.text=element_text(size = rel(1.1)),
+           legend.direction="horizontal",legend.position="bottom")
+```
+
+```{r,eval=FALSE}
+# Save the plot
+ggsave("H:/Jmburu/barplot.png",plot=b,width=8,height=6,unit="in")
+
+```
+
+## Solution 2 ...
+
+```{r,echo=FALSE,fig.height=6,fig.width=9}
+b
+```
+
+ 

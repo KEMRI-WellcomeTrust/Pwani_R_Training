@@ -1,0 +1,573 @@
+---
+title: "Graphs using ggplot()"
+author: "James Mburu"
+date: "February 17, 2016"
+output: beamer_presentation
+header-includes:  
+- \usetheme{CambridgeUS}
+- \useinnertheme{rounded}
+- \usecolortheme{sidebartab}
+- \usefonttheme{professionalfonts}
+- \usepackage{xcolor,soul,hyperref,cite,graphicx,amsmath,verbatim,longtable}
+- \hypersetup{colorlinks,urlcolor=blue}
+linkcolor: blue
+urlcolor: blue
+---
+
+```{r library,include=FALSE,warning=FALSE}
+
+lib <- c("epiDisplay", "plyr" , "base", "foreach", "foreign","ggplot2",
+         "grid","dplyr","tidyr","grid","gridExtra","xtable")
+lapply(lib, library, character.only = TRUE)
+```
+
+
+## Graphical exploration of data.    
+\normalsize
+\begin{itemize}
+\item [-] To have an understanding of you data we normally conduct exploratory data analysis (EDA) which can be graphical or numerical.  
+\item []
+
+\item [-] Primarily EDA is for seeing what the data can tell us before the formal modeling or hypothesis testing task.    
+\item []
+\item [-] Typical graphical techniques used in EDA are:    
+\begin{itemize}
+      \item [-.] Scatter plots,   
+      \item [-.] Box plots,    
+      \item [-.] Bar plots.
+\end{itemize}
+\end{itemize}
+
+##      
+
+\begin{center}
+
+\textbf{Scatter plot}
+
+\end{center}
+
+## Scatter plot
+\normalsize
+\begin{itemize}
+\item [-] Its a useful summary of a set of bivariate data (two variables) 
+\item []
+\item [-] It pairs up values of two quantitative variables in a data set with the aim of giving a good visual picture of the relationship between the two variables.   
+\item []
+\item [-] The resulting pattern indicates the type and strength of the relationship between the two variables.
+\item []
+\item [-] Usually drawn before working out a linear correlation coefficient or fitting a regression line.  
+
+\end{itemize}
+
+## Parts of a graph
+![](images/graphParts.png)
+<!---
+\begin{figure}[htbp!] 
+\centering
+\includegraphics[width=0.75\textwidth,height =0.85\textheight]{graphParts}
+\end{figure}
+
+-->
+
+## Introduction to ggplot()
+\normalsize
+\begin{itemize}
+
+\item [-] \textbf{ggplot} -  R package for data exploration and producing plots.
+\item []
+\item [-] It produces fantastic-looking statistical graphics. \\
+\textit{author- Hadley Wickham}     
+
+\item []
+```{r, include=FALSE}
+# The Grammar of Graphics     
+```
+\item [-] Get the package: 
+\end{itemize}
+\small
+```{r,eval=FALSE}
+      install.packages("ggplot2") # To install the package
+      library(ggplot2) # To load the package
+```  
+
+
+
+## Introduction to ggplot() ...
+\normalsize
+\begin{itemize}
+\item [-] ggplot2 provides two ways to produce plot objects:
+
+\begin{itemize}
+
+   \item [-.] qplot() - quick plot \\          
+- designed to be very similar to plot() and simple to use  \\    
+- may make it easy to produce basic graphs       
+  \item []
+  \item [-.] ggplot() - grammar of graphics plot   \\       
+ - a bit challenging BUT allows much more flexibility when building graphs
+\end{itemize}
+\end{itemize}
+
+## Components of the Graphics in ggplot2.
+\normalsize
+\begin{itemize}
+\item [-] \textbf{Data}: must be stored as an R data frame   
+\item []
+\item [-] \textbf{Coordinate system}: describes 2-D space that data is projected onto \\
+- e.g. Cartesian coordinates,  map projections, ...
+\item []
+\item [-] \textbf{Geoms}: short for geometric objects, describe the type of plot you will produce.\\
+- e.g. points, lines, bar, ...\\
+- geom\_point, geom\_line, geom\_bar, geom\_boxplot, ...
+
+\end{itemize}
+
+## Components of the Graphics in ggplot2 ...
+\normalsize
+\begin{itemize}
+\item [-] \textbf{Aesthetics}: describe visual characteristics that represent data \\
+- e.g. size, color, shape, fill, line type, ...
+\item []
+\item [-] \textbf{Stats}: describe statistical transformations that typically summarize data\\
+- e.g. counts, means, medians, regression lines, ...
+\item []
+\item [-] \textbf{Facets}: help display subsets of the dataset in different panels.\\
+\item []
+%\item [-] labs(ggtitle, xlab, ylab) \\
+%Change axis labels and legend titles
+%\item []
+\item [-] \textbf{Annotation}: Specialised functions for adding annotations to a plot. \\
+
+%annotate\\
+%Create an annotation layer
+
+\end{itemize}
+
+
+## Data
+
+```{r,include=FALSE}
+birth<-read.dta("H:/Jmburu/Class/Data/birthweight2.dta")
+```
+\small
+```{r,echo=F,results='asis'}
+library(knitr)
+kable(head(birth[,-7]),format = "markdown",padding = 0,longtable=T)
+
+```
+
+
+## Scatter plot.
+
+\small
+```{r,comment=NA,fig.height=4,fig.width=8}
+p <- ggplot(data=birth) #initializes a ggplot object
+p + geom_point(aes(x=gestwks,y=bweight),size=2)
+```
+
+
+## Scatter plot ...
+
+\small
+```{r,comment=NA,fig.height=4,fig.width=8}
+(p1<-p + geom_point(aes(x=gestwks,y=bweight),size=2,
+               color="darkgreen",shape=1))
+```
+
+## Scatter plot ... 
+\small
+```{r,comment=NA,fig.height=3,fig.width=6}
+(p1<- p1 + labs(title="Weight at Birth",x="Gestation(weeks)",
+        y="Birth Weight(g)"))
+```
+
+
+## Scatter plot ...Theme
+Controls appearance.    
+
+\begin{itemize}
+\item [-] helps make plot visually pleasing by allowing addition/modification/deletion of;-   
+
+\item [-]  titles, axis labels, tick marks, axis tick labels and legends  
+
+\end{itemize}
+
+
+##  Scatter plot...Theme: Overall Look 
+\small
+```{r,include=FALSE}
+# ggtheme(theme\_bw, theme\_classic, theme\_dark, theme\_gray, theme\_grey, theme\_light, theme\_linedraw, theme\_minimal, theme\_void)
+```
+
+
+```{r,comment=NA,fig.height=3,fig.width=6}
+(p1<-p1 + theme_bw())
+```
+
+##  Scatter plot...Theme: Overall Look 
+\tiny
+```{r,fig.height=1,fig.width=11}
+p.1<-p1+theme_classic(); p.2<- p1+theme_minimal(); p.3<-p1+theme_dark(); p.4<-p1+theme_void()
+```
+```{r,echo=F}
+grid.arrange(p.1,p.2,p.3,p.4,nrow=2, ncol=2)
+```
+
+## Scatter plot ...Theme: titles, tick marks, tick labels
+\small
+
+```{r,comment=NA,fig.height=5,fig.width=8}
+p1 <- p1 + theme(title=element_text(color="blue", size=20),
+           axis.title=element_text(size=14,face="bold"),
+           axis.title.x=element_text(color="darkgreen"),
+           axis.text=element_text(size=14),
+           axis.text.y=element_text(color="black"),
+           axis.text.x=element_text(color="purple"),
+           axis.ticks.y=element_blank())
+```
+
+
+##
+\small
+```{r,echo=FALSE,comment=NA,fig.height=5,fig.width=8}
+p1
+```
+
+
+## Theme: Legends
+\small
+```{r}
+p <- ggplot(data=birth) #initializes a ggplot object
+p1<- p + geom_point(aes(x=gestwks,y=bweight,color=sex),size=2)
+p1<- p1 + labs(title="Weight at Birth",x="Gestation(weeks)",
+        y="Birth Weight(g)") + theme_bw()
+p1<- p1 + theme(title=element_text(color="blue", size=20),
+           axis.title=element_text(size=14,face="bold"),
+           axis.title.x=element_text(color="darkgreen"),
+           axis.text=element_text(size=14),
+           axis.text.y=element_text(color="black"),
+           axis.text.x=element_text(color="purple"),
+           axis.ticks.y=element_blank())
+p1 <- p1 + theme(legend.key=element_blank(),
+           legend.text=element_text(size = rel(1.1)),
+           legend.direction="horizontal",legend.position="bottom")
+```
+
+
+## 
+
+```{r,echo=FALSE,comment=NA,fig.height=6,fig.width=9}
+p1
+```
+
+
+
+## Facets.
+\normalsize
+-. Facets display subsets of the dataset in different panels.     
+   
+
+\small
+
+```{r,comment=NA}
+p1<- p1 + facet_grid(. ~ agegrp) #Lay out panels in a grid. 
+
+```
+
+## Facets
+
+```{r, echo=FALSE,comment=NA,fig.height=7,fig.width=11}
+p1
+```
+
+
+```{r,include=FALSE}
+## Overal code
+p <- ggplot(data=birth) #initializes a ggplot object
+p1<- p + geom_point(aes(x=gestwks,y=bweight),size=2,
+               color="darkgreen",shape=1) # size,shape..
+p1<- p1 + labs(title="Weight at Birth",x="Gestation(weeks)",
+        y="Birth Weight(g)") # labs
+```
+
+## Saving Graphs.    
+```{r,eval=FALSE}
+ggsave() # saves last plot displayed..Default
+```
+\normalsize
+-. Formats file name extension     
+*.pdf .jpg  .png .bmp .svg .wmf .tex  .tiff .ps .eps*          
+
+\small
+```{r,eval=FALSE}
+ggsave("H:/Jmburu/birth.pdf",plot=p1 ,width=8, height=6, unit="in")
+```
+
+
+```{r, include=FALSE}
+
+## Saving plot 
+
+# Some useful formats.  
+# \small
+# # Start device driver
+# 
+# pdf("mygraph.pdf")  Produces a PDF file   
+# jpeg() jpeg file  
+# png()  png file
+# bmp()  bmp file
+# win.metafile() windows metafile
+# postscript() creating PostScript graphics files.   
+# 
+
+# terminate device
+dev.off()
+
+## Introduction to ggplot() ...
+
+# ggplot is best used on data in data frame form.     
+
+#
+
+```
+
+
+ 
+
+```{r,include=FALSE}
+# p + geom_point(shape=1,size=2) + stat_smooth()
+## adding a  stat   
+```
+
+
+
+```{r,include=FALSE}
+# ## transparency
+# p + geom_point(size=3,alpha=1/3) # transparency intensity decrease with 
+                                # denominator increase
+```
+
+```{r,include=FALSE}
+## Scale
+
+# controls the mapping from data to aesthetic           
+# - "takes data and turns it into something that can be perceived visually"        
+# - color and fill, shape, size, position      
+# - provides axes or legends  
+```
+
+
+```{r,include=FALSE}
+## Labels
+# s <-p2 + geom_point() +
+#   annotate("text", x=30, y=3000, label="tttt", color="red") +
+#   annotate("text", x=40, y=2000, label="ssss", color="black") + 
+#   ggtitle("Birth weight") + xlab("Gestation(weeks)") + 
+#   xlim(22,42)
+
+```
+
+
+\small
+```{r,include=FALSE}
+geoms <- help.search("^geom_", package = "ggplot2")
+geoms$matches[, 1:2]
+stats <- help.search("^stat_", package= "ggplot2")
+stats$matches[, 1:2]
+```
+   
+ 
+##
+
+\begin{center}
+
+\textbf{Box plot}
+
+\end{center}
+
+## Box plot
+\normalsize
+\begin{itemize}
+\item [-] Provides a standardized way of displaying the distribution of data. \item []
+
+\item [-] It attempts to provide a visual shape of the data distribution.
+\item []
+\item [-] This is based on some summary measures: min, $1^{st}$ quartile, median, $3^{rd}$ quartile, and max.   
+\item []
+\item [-] Range, IQR, Outliers= $3^*IQR$ above $3^{rd}$ or below $1^{st}$ quartiles.   
+\end{itemize}
+
+
+## Box plot ...
+![](images/box2.png)
+<!---
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=0.75\textwidth,height =0.55\textheight]{box2}
+\end{figure}
+
+
+## Box plot ...
+\small
+```{r,include=FALSE}
+attach(birth)
+```
+
+```{r,fig.height=5,fig.width=9}
+boxplot(bweight~sex,las=1,main="Birth weight distribution",
+        ylab="birth weight(g)",ylim=c(500,max(bweight)))
+
+```
+-->
+
+## Box plot ...
+
+\small
+```{r}
+bx<-ggplot(birth, aes(x=sex, y=bweight, fill=sex)) +
+    geom_boxplot() + guides(fill=FALSE)
+bx<- bx + theme_bw() + labs(title="Birth weight distribution"
+                            ,x="",y="Birth weight(g)")
+bx<- bx + theme(title=element_text(color="blue", size=18),
+  axis.title.y=element_text(size=15,face="bold",color="brown"),
+  axis.text=element_text(size=14),
+  axis.text.x=element_text(color="purple"))
+
+```
+
+
+##
+```{r,echo=FALSE,fig.height=6,fig.width=9}
+bx
+```
+
+
+##
+
+\begin{center}
+
+\textbf{Bar plot}
+
+\end{center}
+
+## Bar plot  
+\normalsize
+
+\begin{itemize}
+
+\item [-] Provide a visual presentation of categorical data.
+\item []
+\item [-] Present grouped data with rectangular bars with lengths proportional to the values that they represent.    
+%\item []
+%\item [-] uses either horizontal or vertical bars to show comparisons among categories.    
+\item []
+\item [-] Two types;
+  \begin{itemize}
+    \item [-.] Grouped - presents bars clustered in groups
+    \item [-.] Stacked - shows bars divided into subparts to show cumulative effects.
+  \end{itemize}
+\end{itemize}
+
+## Bar plot ...
+\normalsize
+e.g. Cross tabulation of mother's age and birth weight.       
+
+\small
+```{r,include=F}
+(Count<-table(birth$lbw,birth$agegrp))
+xtable(Count)
+Count1<-round(prop.table(Count, 2),2)*100
+```
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrrrr}
+  \hline
+ & 20-29 yrs & 30-34 yrs & 35-39 yrs & 40+yrs \\ 
+  \hline
+Weight $<$2500 &  15(0.16) &  29(0.12) &  32( 0.12) &   4(0.10) \\ 
+  Normal 2500+ &  77(0.84) & 222(0.88) & 226(0.88) &  36 (0.90) \\ \hline
+   Total    &  92 & 251 & 258 &  40 \\
+   \hline \hline
+\end{tabular}
+\end{table}
+
+<!--
+## Bar plot ...`Stacked Bar Plot`
+
+\tiny
+```{r,fig.height=5,fig.width=10}
+barplot(Count,las=1, main="Stacked Bar Plot",border="darkblue",xlab="Age group",ylab="Counts",
+        col=c("darkgreen","lightgrey"),legend=rownames(Count))
+box();box("figure") 
+```
+
+## Bar plot ... `Grouped Bar Plot`
+\tiny
+```{r,fig.height=4.4,fig.width=8}
+barplot(Count, beside = T, main ="Grouped Bar Plot",xlab="Age group",ylab ="Counts"
+        , border ="red",yaxt='n',col=c("lightblue","lavender"),ylim=c(0,250),
+        legend=rownames(Count),args.legend =list(x ="topright"),space=c(0.05,0.5))
+axis(2, at = seq(0, 250, by = 30), las = 1);box()
+```
+
+-->
+## Bar plot ...`Stacked Bar Plot`
+\small
+```{r,include=FALSE}
+Count<- data.frame(Count)
+names(Count)<- c("lbw","agegrp","count")
+```
+
+```{r}
+b<-ggplot(data=Count, aes(x=agegrp,y=count,fill=lbw))
+b<- b + geom_bar(stat="identity",width=.5,position ="stack") +
+    theme_bw()
+b<- b + labs(title="Stacked Bar Plot",x="Age group",y="Counts") 
+b<- b + theme(legend.key=element_blank(),
+           legend.title=element_blank(),
+           legend.text=element_text(size = rel(1.1)),
+           legend.direction="horizontal",legend.position="bottom")
+
+
+```
+
+##
+
+```{r,echo=FALSE,fig.height=6,fig.width=9}
+b
+```
+
+## Bar plot ... `Grouped Bar Plot`   
+\small
+```{r}
+b<-ggplot(data=Count, aes(x=agegrp,y=count,fill=lbw))
+b<- b + geom_bar(stat="identity",width=.5,position ="dodge") +
+  theme_bw()
+b<- b + labs(title="Grouped Bar Plot",x="Age group",y="Counts")
+b<- b + theme(legend.key=element_blank(),
+           legend.title=element_blank(),
+           legend.text=element_text(size = rel(1.1)),
+           legend.direction="horizontal",legend.position="bottom")
+ 
+
+```
+
+##
+
+```{r,echo=FALSE,fig.height=6,fig.width=9}
+b
+```
+
+## Links 
+           
+\href{http://www.cookbook-r.com/Graphs/}{  Cookbook for R}       
+
+[Help topics](http://docs.ggplot2.org/current/)    
+
+##
+
+\begin{center}
+
+\textbf{Thank You}
+
+\end{center}
