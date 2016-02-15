@@ -1,0 +1,428 @@
+---
+title: "Logistic Regression"
+subtitle: "Analysis of Categorical outcome data"
+author: "John Ojal and Emily Odipo"
+institution : KEMRI/Wellcome Trust Research Programme
+output:
+  beamer_presentation:
+    theme: "CambridgeUS"
+    colortheme: "sidebartab"
+date: "Tuesday, February 17, 2015"
+framework   : io2012
+
+---
+
+## Logistic Regression
+
+**Objectives**
+
+ 1) Use a logistic model to compare the log odds of disease (or any binary outcome variable)   in two groups 
+
+ 2) Use a logistic model to compare the odds of an outcome for a categorical exposure with 2 or more levels and to estimate crude odds ratios associated with each level.
+
+ 3) Understand statistical tests of the null hypothesis - there is no association between the exposure and outcome  
+  
+      i)  using the Wald test
+      ii)  using the Likelihood Ratio Test
+
+4) Models with more than one explanatory variable 
+
+5) Interaction/Effect Modification using logistic regression models
+
+
+
+## Introduction
+
+###Definition
+__Logistic regression__ - a regression modelling technique for producing Odds Ratios (ORs); models the log odds of a binary "outcome"  
+  
+###Examples    
+1) Effect of T.B infection on death in HIV positive patients crude(unadjusted) OR; 95% CI and hypothesis tests
+2) Effect of mothers education on childs' measles immunisation status
+3) Effect of ethnicity on risk of death from breast cancer
+4) Effect of gender on being a high wage earner
+
+
+## A reminder of Odds and Odds Ratios (OR).
+
+$$
+Odds = \frac{Number \   with \  the \  disease \ (D)}{Number \  without \   the  \  disease \  (H)}
+$$
+
+$$
+Odds \ Ratio (OR) = \frac {Odds \ in \ exposed \ group \  (\frac{D_1}{H_1})} {Odds\  in \  unexposed \ group \ (\frac{D_0}{H_0})}
+$$
+
+Odds in exposed group = (Odds in unexposed group) x (Odds ratio)
+
+Log (odds in exposed group) = Log (odds in unexposed)  + Log (odds ratio)
+
+Log odds = Baseline  +  Exposure
+
+##  Form of the logistic regression model
+ Model : 
+ $$
+ log \left( \frac{p}{1-p} \right) = \beta_{0} + \beta_{1}X_{1} + ... + \beta_{k}X_{k}
+ $$
+ 
+Where:
+
+$p$  is the probability of desired outcome
+
+$\beta_{i} , i=0,1,..k$ are the coefficients to be estimated 
+
+$X_{1},X_{2}, ..., X_{k}$ are k explanatory variables
+
+ 
+## Why model the log odds of disease? 
+
+1. log odds can take any value, positive or negative whereas risks are constrained.  
+
+2. It is easier for statistical models to model a quantity that is unconstrained than one which is constrained.  
+
+3. This avoids the possibility of predicting impossible values from the model.  
+
+Modelling log odds is referred to as __logistic regression__, and the models are referred to as __logistic models__. 
+  
+ 
+
+
+## A logistic model with a single binary exposure variable
+
+
+__Estimating the odds, log odds and the odds ratio "by hand"__ 
+
+OR = (odds in exposed group)/(odds in baseline)
+
+Therefore:
+odds in exposed = (odds in baseline) x OR
+
+log (odds in exposed) = log (odds in baseline) + log OR
+
+
+Microfilariae Infection | Savannah | Forest | Total |
+------------------------|----------|--------|-------|
+Negative                |  267     |   213  | 480   |
+Positive                |  281     |   541  | 822   | 
+Total                   |  548     |   754  | 1302  |
+
+
+## Using the Microfilariae by Area data 
+
+Substituting the areas in our example gives:
+
+- odds in forest = (odds in savannah)   x OR (forest compared to savannah)
+
+- log (odds in forest) = log (odds in savannah) + log OR(forest vs savannah)
+
+- We can write the second of these  two expressions as the logistic regression model: 
+log odds = Baseline  + Area
+
+where 	Baseline  = log (odds in savannah), 
+Area = log OR for individuals in the forest  and 0 individuals in the savannah.
+
+
+## EXERCISE 1
+Data
+
+Microfilariae Infection  | Savannah | Forest | Total |
+-------------------------|----------|--------|-------|
+Positive                 |  267     |   213  | 480   |
+Negative                 |  281     |   541  | 822   | 
+Total                    |  548     |   754  | 1302  |
+
+Calculate the prevalence, odds and log odds of Microfilariae infection in the forest and savannah areas, and fill the table below.
+
+Measure                  | Savannah | Forest | Total |
+-------------------------|----------|--------|-------|
+Risk/Prevalence          |    --    |  --    | 63.1  |
+Odds                     |    --    |  --    | 1.712 | 
+Log odds                 |    --    |  --    | 0.538 |
+
+
+
+## Exercise 1 solution
+
+Measure                  | Savannah | Forest | Total |
+-------------------------|----------|--------|-------|
+Risk/Prevalence (%)      | 51.3     | 71.8   | 63.1  |
+Odds                     | 1.052    | 2.540  | 1.712 | 
+Log odds                 | 0.052    | 0.932  | 0.538 |
+
+
+The Odds ratio = 2.41  Whilst the log odds ratio = 0.881
+
+## R Code and Output for Logistic Model
+
+\tiny
+```{r}
+onch <-read.csv("onchall.csv") # Read in CSV data 
+m1 <- glm(mf~area, data=onch,family=binomial) # Run model
+summary(m1) # Show model
+``` 
+\normalsize
+
+## Getting the ORs and Confidence intervals using R
+
+\small
+```{r}
+exp(coef(m1))     # transform the coeffs into ORs #
+exp(confint(m1))   # and show their CIs
+```
+\normalsize
+
+## Hypothesis test: binary exposure
+
+1) Wald Test
+2) Likelihood Ratio Test
+
+Let's start with the Wald test...
+
+## Wald test (1)
+* The null hypothesis for this test is that the true parameter (logOR) value is 0.  
+  + The test statistic (z) is obtained by dividing the parameter estimate by its SE and comparing it with a Standard Normal distribution.
+* The Wald test for area assesses the $H_0$ that the true log OR=0  (i.e. that the true OR is 1) versus the alternative that the true log OR is not 0.  
+
+## Wald test (2)
+
+\tiny
+```{r}
+summary(m1)
+```
+\normalsize
+
+## Wald test (3)
+
+1. The Wald test for the association between microfilarial infection and area is given by:
+ z =  log(OR)/SE(logOR)  =  0.881/0.118 = 7.487
+\newline
+\newline
+2. The corresponding p-value is small (p<< 0.001), indicating strong evidence against the null hypothesis of no association between microfilarial infection and area.
+
+
+## Practical 1
+Use the dataset ond15p.csv
+
+* We wish to investigate the association between microfilarial infection and optic nerve disease Variables of interest include
+    i) ond (optic nerve disease)
+    ii) mfpos (microfilarial positve/negative)
+    iii) sex (male/female)
+* Tabulate ond and mfpos - calculate the chi test
+* Compute the odds ratio of optic nerve disease in microfilarial positive patients
+* Comment on the wald test and the 95% CI
+* Compute the odds ratio of optic nerve disease in females
+* Comment on the odds ratio, wald test and the 95% CI
+
+## Logistic regression: multinomial exposure 
+Consider
+
+|               | $Ages^{\footnote{in years}}$| |       |
+|---------------|-------|-------|-------|-------|-------|
+|Microfil. Inf. | 5-9   |10-19  |20-39  | 40+   | Total |
+|---------------|-------|-------|-------|-------|-------|               
+|Negative       | 156   | 119   | 125   | 80    |  480  |
+|Positive       |  46   |  99   | 299   | 378   |  822  |
+|---------------|-------|-------|-------|-------|-------|   
+|Total          | 202   | 218   | 424   | 458   |  1302 |
+
+Age Group Variable values coded as 0,1,2,3  respectively
+
+## Exercise 2
+
+Calculate the missing values in the table below
+
+Measure                  | 5-9      | 10-19  | 20-39  | >=40  |
+-------------------------|----------|--------|--------|-------|
+Odds                     | 0.29     | 0.83   | 2.392  | --    |
+Odds ratio               | --       | --     | --     | 16.03 |
+Log odds                 | --       | --     | 0.872  | --    |
+Log OR                   | 0        | 1.037  | --     | --    |
+
+
+NB We have used the first age group (ie 5-9 years) as the Reference group --> OR=1
+
+## Solutions to Exercise 2
+|Microfil. Inf. | 5-9   |10-19  |20-39  | 40+   | Total |
+|---------------|-------|-------|-------|-------|-------|               
+|Negative       | 156   | 119   | 125   | 80    |  480  |
+|Positive       |  46   |  99   | 299   | 378   |  822  |
+
+
+
+Measure                  | 5-9      | 10-19  | 20-39  | >=40  |
+-------------------------|----------|--------|--------|-------|
+Odds                     | 0.29     | 0.83   | 2.392  | 4.725 |
+Odds ratio               | 1.00     | 2.82   | 8.11   | 16.03 |
+Log odds                 | -1.221   | -0.184 | 0.872  | 1.553 |
+Log OR                   | 0        | 1.037  | 2.093  | 2.774 |
+
+
+Note that you can calculate the log odds ratio for age group 10-19 compared to age group 5-9 either as:
+  	1.037 = log(2.82) = (the log OR), or
+		1.037 = (-0.184) - (-1.221) (the difference in the log odds).
+
+## Logistic regression: multinomial exposure, R example
+
+The association between age group and mf infection using the logistic model:
+
+        log odds = Baseline + Agegrp
+
+* Baseline is the log odds in the lowest age group (age group 5-9)
+* Agegrp is the logOR for each level of age group relative to age group 5-9 (three non-zero logORs)
+
+
+NB We use the function __as.factor__ as we are not using the values of the age groups ie 0-3 as these are categorical indicators called _factors_ in R
+
+## Prediction of being infected with MF according to age 
+\scriptsize
+```{r (eval=FALSE)}
+onch <-read.csv("onchall.csv") # Read in CSV data 
+m2 <- glm(mf ~ as.factor(agegrp), data=onch, family=binomial) # Fit the model
+```
+
+```{r collapse=TRUE}
+summary(m2)
+```
+\normalsize
+
+## Predictions as ORs with Confidence intervals
+\scriptsize
+```{r collapse=TRUE}
+exp(coef(m2))     # transform the coeffs into ORs #
+exp(confint(m2))   # and show their CIs
+```
+\normalsize
+
+##  Note separate Wald tests
+\scriptsize
+```{r collapse=TRUE}
+summary(m2)
+```
+\normalsize
+
+##Testing for association (2)
+1) Wald Test
+2) __Likelihood Ratio Test__
+
+## The Likelihood ratio test (1)
+1. $H_0$ - the model without the term for age group is adequate, and we do not need the extra term for age group in our model.  
+    + odds of microfilarial infection are the same in all the age groups ie $OR_i$=1 (the logOR=0).
+    \newline
+    \newline
+
+2. The Likelihood Ratio Test (LRT) is based on the Likelihood Ratio Statistic (LRS):
+  			LRS=2($L_1$-$L_0$); where
+
+    +  $L_1$ is the maximised log likelihood under the alternative hypothesis, ie different odds of disease in each group 
+    +  $L_0$ is the log likelihood under the null hypothesis ie one with no age effect included
+
+## Performing a likelihood ratio test
+1) __Obtain the value of $L_1$__ by fitting a model with the term for age group (i.e fit a model with mf and agegroup
+
+2) __Obtain the value of $L_0$__ This requires us to fit a model without the term for age group (i.e. Fit a model with mf alone)
+
+3) __Compare $L_1 \ and \ L_0$__ 
+
+## LR test in R
+\scriptsize
+```{r compress=TRUE}
+# Fit the model with age groups
+m1 <- glm(mf ~ as.factor(agegrp), data=onch, family=binomial) 
+
+# Fit the empty model
+m0<- glm(mf ~ 1, data=onch, family=binomial) 
+anova(m0,m1,test="LRT") # Compare the two LLs using anova 
+```
+\normalsize
+
+
+##Practical 2 
+1. Use the dataset ond15p.csv
+    + Explore the association between microfilarial infection and optic nerve disease by modelling Ond (optic nerve disease) with Mfpos (microfilarial positve/negative)
+          * add sex (male/female) to mfpos; and then agegrp to mfpos (separately)
+2. Tabulate ond and agegrp- calculate the chi test
+3. Compute the odds ratio of optic nerve disease in the various age groups
+4. Comment on the Wald test and the 95% CI
+5. Test whether adding agegroup into the model with _mfpos_ and _sex_ already in it improves model fit and comment on your findings
+
+##Interaction (or Effect modification)
+###Definition
+". there is an interaction between the effects of two exposures if the effect of one exposure varies according to the level of the other exposure." p322 Kirkwood and Sterne, Essential Medical Statistics 2nd Ed, 2003 Blackwell 
+
+### Example    
+"... the protective effect of breastfeeding against infectious diseases in early infancy is more pronounced among infants living in poor environmental conditions than among those living in areas with adequate water supply and sanitation facilities" Kirkwood & Sterne _ibid_
+
+## Interaction example
+```{r }
+data("womensrole", package = "HSAUR2")
+fm1 <- cbind(agree, disagree) ~ gender + education
+wrole1 <- glm(fm1, data = womensrole, family = binomial())
+coef(wrole1)
+```
+
+## Main Effects Model
+```{r, echo=F, fig.height=3, fig.width=4, fig.align='center'}
+womensrole$pred <- predict(wrole1, type="response")
+womensrole$p.agree <- womensrole$agree/(womensrole$agree+ womensrole$disagree)
+png("plot.png", res=200, height = 15, width = 20, units = "cm")
+plot(womensrole$education[womensrole$gender=="Male"], womensrole$pred[womensrole$gender=="Male"], type="l", ylab = "Probability of agreeing", xlab = "Years of education", ylim=c(0,1))
+lines(womensrole$education[womensrole$gender=="Female"], womensrole$pred[womensrole$gender=="Female"], col="red")
+points(womensrole$education[womensrole$gender=="Male"], womensrole$p.agree[womensrole$gender=="Male"], pch="\u2642", col="black")
+points(womensrole$education[womensrole$gender=="Female"], womensrole$p.agree[womensrole$gender=="Female"], pch="\u2640", col="red")
+invisible(dev.off())
+
+library(png)
+library(grid)
+img <- readPNG("plot.png")
+grid.raster(img)
+
+```
+
+## Fitting and testing a model with an interaction
+\scriptsize
+```{r compress=TRUE}
+# Fit the model with gender and education interacting
+wrole2 <- glm(cbind(agree, disagree) ~ gender * education,  
+              data =  womensrole, family = binomial()) 
+# Test this model against the main effect model
+anova(wrole2,wrole1,test="Chisq") ## NB Chisq <==> LRT
+```
+\normalsize
+
+## With interaction (effect modification accounted for)  
+```{r, echo=F, fig.height=3, fig.width=4, fig.align='center'}
+womensrole$pred <- predict(wrole2, type="response")
+png("plot.png", res=200, height = 15, width = 20, units = "cm")
+plot(womensrole$education[womensrole$gender=="Male"], womensrole$pred[womensrole$gender=="Male"], type="l", ylab = "Probability of agreeing", xlab = "Years of education", ylim=c(0,1))
+lines(womensrole$education[womensrole$gender=="Female"], womensrole$pred[womensrole$gender=="Female"], col="red")
+points(womensrole$education[womensrole$gender=="Male"], womensrole$p.agree[womensrole$gender=="Male"], pch="\u2642", col="black")
+points(womensrole$education[womensrole$gender=="Female"], womensrole$p.agree[womensrole$gender=="Female"], pch="\u2640", col="red")
+invisible(dev.off())
+
+img <- readPNG("plot.png")
+grid.raster(img)
+
+```
+
+## Summary
+
+1) Obtain log odds of outcome
+
+2) Obtain OR and 95% CI
+
+3) Wald Test (null hypothesis: OR=1)
+    - Assess null hypothesis for each level/group
+    
+4) Likelihood Ratio Test (null hypothesis: OR=1)
+    - Assess null hypothesis for addition of an extra term/variable
+    
+5) Application of LRT to check for effect modification in logistic regression
+
+
+## Practical 3
+1. Use the dataset onchall.csv
+    + Fit a model predicting microfilarae infection (mf) with both area and agegrp as main effects
+    + Fit a model of mf with the interaction  between the two explanatory variables area and agegrp
+    + Compute a likelihood ratio test of the more complex model compared to the simpler model  
+2. Which model should we use?  The simpler one without the interaction or the more complicated with the interaction?  
+  
