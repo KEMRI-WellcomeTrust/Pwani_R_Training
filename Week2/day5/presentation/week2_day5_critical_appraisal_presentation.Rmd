@@ -142,7 +142,7 @@ grid.raster(img)
 
 ## Summary
 
-1. Different study designs attract different checklists 
+1. Different study designs attract different appraisal criteria
 \newline
 2. There are a number of structured checklists that you can use to aid your appraisal
 \newline
