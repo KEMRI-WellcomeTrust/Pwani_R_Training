@@ -1,0 +1,177 @@
+---
+title: "Critical Appraisal of Research Papers/Reports"
+author: |
+  | Introduction to Statistics Course
+  | Feb 25th, 2016
+  | Presenter: John Ojal
+output:
+  beamer_presentation:
+    includes:
+        in_header: mystyle.tex
+    colortheme: sidebartab
+    theme: CambridgeUS
+framework: io2012
+---
+
+## Objectives
+
+1. Effective Reading and Assessing Flaws
+\newline
+2. Standard appraisal questions
+\newline
+3. Questions specific to the study designs
+\newline
+4. Group work/review exercise (4 papers)
+\newline
+5. Summary/questions
+
+## Steps for effective reading
+
+```{r, echo=F,fig.width=4, fig.height=2.5, fig.align='center'}
+library(png)
+library(grid)
+img <- readPNG("effective_reading.png")
+grid.raster(img)
+```
+
+
+##  Questions to ask when reading a paper
+
+\begin{columns}
+\begin{column}{0.48\textwidth}
+    ```{r, echo=F,fig.width=4, fig.height=2.5, fig.align='center'}
+    img <- readPNG("questions_while_reading.png")
+    grid.raster(img)
+    ```
+\end{column}
+\begin{column}{0.48\textwidth}
+  1. Is it of interest?
+  \newline
+ \newline
+  2. Why was it done?
+ \newline
+ \newline
+  3. How was it done?
+ \newline
+ \newline
+  4. What has it found?
+ \newline
+ \newline
+  5. What are the implications? 
+  \newline
+ \newline
+  6. What else is of interest? 
+
+\end{column}
+\end{columns}
+
+## Appraising Cross-sectional Studies
+
+1. Is the design appropriate for the stated objectives?
+\newline
+2. Who was studied?
+\newline
+3. How was the sample obtained?
+\newline
+4. What was the response rate?
+\newline
+5. How could selection bias arise?
+\newline
+6. Were the findings chance?
+\newline
+7. Can the results be generalized?
+
+## Appraising Case-control studies
+
+1. Is the design appropriate for the stated aims?
+\newline
+2. How were the cases obtained?
+\newline
+3. Is the control group appropriate?
+\newline
+4. Data collected same way for cases and controls?
+\newline
+5. Where are the biases?
+\newline
+6. Could there be confounding?
+
+
+## Appraising Cohort Studies
+
+1. Is the design appropriate for the stated objectives?
+\newline
+2. Who exactly has been studied?
+\newline
+3. Was a control group used? Should one have been used?
+\newline
+4. How adequate was the follow up?
+\newline
+5. Is the design appropriate to the stated aims?
+\newline
+6. Was exposure/intervention accurately measured?
+\newline
+7. Did analysis allow for the passage of time?
+\newline
+8. What else might influence the outcome?
+
+## Appraising Clinical Trials
+
+1. Is the design appropriate for the stated objectives?
+\newline
+2. Were treatments randomly allocated?
+\newline
+3. Were all the patients accounted for?
+\newline
+4. Were outcome assessments blind?
+\newline
+5. How was randomization carried out?
+\newline
+6. Treatment groups comparable at baseline?
+\newline
+7. Protocol deviations reported?
+\newline
+8. Results analysed by intention to treat?
+
+## Additional resources 
+
+1. [\textcolor{blue}{STrengthening the Reporting of OBservational studies in Epidemiology (STROBE)}](http://strobe-statement.org/index.php?id=available-checklists)
+\newline
+2. [\textcolor{blue}{Consolidated Standards of Reporting Trials (CONSORT)}](http://www.consort-statement.org/downloads/consort-statement)
+\newline
+3. [\textcolor{blue}{Preferred Reporting Items for Systematic Reviews and Meta-Analyses (PRISMA)}](http://www.prisma-statement.org/PRISMAStatement/Default.aspx)
+
+## Summary
+
+1. Different study designs attract different checklists 
+\newline
+2. There are a number of structured checklists that you can use to aid your appraisal
+\newline
+3. Also use your wider knowledge of conceptual, methodological and practical issues in epidemiological research
+to inform your evaluation.
+
+
+## Appraisal tasks (Group work)
+
+### Cross-sectional study paper for review
+
+Neal KR, Hebden J, Spiller R. *Prevalence of gastrointestinal symptoms six months after bacterial gastroenteritis and risk factors for development of the irritable bowel syndrome: postal survey of patients.* British Medical Journal (1997)  314: 779-782l.
+
+### Cohort study paper for review
+
+Rosenblatt et al. *Oral contraceptives and the risk of all cancers combined and site-specific cancers in Shanghai*. Cancer Causes Control. 2009 February ; 20(1): 27–34
+
+
+## Appraisal tasks (Group work) 
+
+### Clinical trial paper for review
+
+M Svendsen, R Blomhoff, I Holme and S Tonstad *The effect of an increased intake of vegetables and fruit on weight loss, blood pressure and antioxidant defense in subjects with sleep related breathing disorders*. European Journal of Clinical Nutrition (2007) 61, 1301–1311
+
+### Case control study paper for review
+Comba P, Barbieri PG, Battista G et al. *Cancer of the nose and paranasal sinuses in the metal industry: A case-control study*. British Journal of Industrial Medicine (1992)  49: 193-196.
+
+
+
+
+
+

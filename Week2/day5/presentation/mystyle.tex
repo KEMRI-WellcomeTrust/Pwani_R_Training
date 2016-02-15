@@ -1,0 +1,6 @@
+% \pgfdeclareimage[width=\paperwidth,height=\paperheight]{background}{appraisal_wheel.png}
+%  \usebackgroundtemplate{\pgfuseimage{background}}
+
+\usepackage{tikz}
+\usebackgroundtemplate{
+\tikz\node[opacity=0.1] {\includegraphics[height=\paperheight,width=\paperwidth]{appraisal_wheel.png}};}
