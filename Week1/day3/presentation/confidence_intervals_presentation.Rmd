@@ -1,0 +1,338 @@
+---
+title: "Confidence intervals for means"
+author: "Boniface Karia"
+date:   "February 17, 2016"
+
+output:
+  beamer_presentation:
+    theme: "CambridgeUS"
+    colortheme: "sidebartab"
+framework   : io2012
+---
+
+## Learning objectives
+
+1. Describe the population mean and standard deviation
+\newline
+2. Calculate the mean and standard deviation from the sample data
+\newline
+3. Describe the standard error of the mean
+\newline
+4. Calculate confidence intervals for sample means
+
+
+## Situation
+1. Want to estimate the actual population mean
+\newline
+2. But can only get the sample mean
+\newline
+3. Find a range of values $L$ and $U$, $L<\mu<U$, that we can be really confident contains $\mu$
+\newline
+4. This range of values is called a “confidence interval”
+
+
+## Calculating the standard error of a mean
+
+1. Sampling distribution, why is it required?
+2. Standard error of the mean
+
+\huge
+$$
+\sigma_{\mu} =  \frac{\sigma}{\sqrt{n}}
+$$
+\normalsize
+
+Where,
+
+- $\sigma_{\mu}$ is the standard error of the mean
+
+- $\sigma$ is the standard deviation of the original distribution
+
+- $n$ is the sample size
+
+
+## Calculating the CI of a mean when $\sigma$ is known
+
+```{r, echo=F, figure.align='center', fig.height=3.5, fig.width=4.5}
+# draw the normal curve
+curve(dnorm(x,0,1), xlim=c(-3,3), cex.axis=0.8, cex.lab=0.8,xlab="Z", ylab = "Normal density")
+
+# define shaded region
+from.z <- -1.96
+to.z <- 1.96
+ 
+S.x  <- c(from.z, seq(from.z, to.z, 0.01), to.z)
+S.y  <- c(0, dnorm(seq(from.z, to.z, 0.01)), 0)
+polygon(S.x,S.y, col="red")
+
+arrows(x0=2, y0= 0.3, x1=1, y1=0.1, length = 0.1)
+text(2,0.32,"Area=0.95", cex = 0.7)
+```
+
+- Lower limit = $\bar{x} - Z_{\frac{\alpha}{2}} \times \sigma_{\mu}$ , Upper limit = $\bar{x} + Z_{\frac{\alpha}{2}} \times \sigma_{\mu}$
+
+- For a 95% CI (i.e $\alpha = 0.05$) we have $\bar{x} \pm 1.96 \times \sigma_{\mu}$
+
+
+## Calculating the CI of a mean when $\sigma$ is unknown
+```{r, echo=F, figure.align='center', fig.height=3.4, fig.width=4.5}
+# degrees of fredom
+df=10
+# draw the normal curve
+curve(dt(x,df=df), xlim=c(-3,3), cex.axis=0.8, cex.lab=0.8, xlab = "t", ylab = paste("t density (",df," df)", sep=""))
+ 
+# define shaded region
+from.z <- qt(0.025,df=df)
+to.z <- qt(0.975,df=df)
+ 
+S.x  <- c(from.z, seq(from.z, to.z, 0.01), to.z)
+S.y  <- c(0, dt(seq(from.z, to.z, 0.01),df=df), 0)
+polygon(S.x,S.y, col="red")
+
+arrows(x0=2, y0= 0.3, x1=1, y1=0.1, length = 0.1)
+text(2,0.32,"Area=0.95", cex = 0.7)
+```
+
+Lower limit = $\bar{x} - t_{\left(\frac{\alpha}{2},n-1\right)} \times \sigma_{\mu}$ , Upper limit = $\bar{x} + t_{\left(\frac{\alpha}{2},n-1\right)} \times s_{\mu}$
+
+For a 95% CI (i.e $\alpha = 0.05$) we have $\bar{x} \pm t_{(0.025,n-1)} \times s_{\mu}$
+
+## Interpretation of the CI
+
+```{r, echo=F, figure.align='center', fig.height=5, fig.width=6}
+my.ci <- function(n=100,alpha=0.05,mu=5,sd=3){
+  x <- rnorm(n=n,mean=mu,sd=sd)
+  mean.x = mean(x)
+  se.x   = sqrt(var(x)/n)
+  error <- qt(1-alpha/2,df=n-1)*se.x
+  lower <- mean.x - error
+  upper <- mean.x + error
+  return(c(mean.x,lower,upper))
+}
+
+n=100
+mu=5
+
+data<- my.ci()
+for (i in 1:(n-1)){
+  data <- rbind(data,my.ci())
+}
+
+plot(data[,1], 1:nrow(data), xlim=range(data[,c(2,3)]), type='n', xlab="x", ylab="Replication")
+abline(v=mu)
+for (i in 1:nrow(data)){
+ cover <- data[i,2]<mu & mu<data[i,3]
+ color <- if (cover) {"black"} else{"red"}
+ segments(data[i,2], i, data[i,3], i, col = color)
+}
+```
+
+## Sample size and the CI
+
+```{r, echo=F, figure.align='center', fig.height=6, fig.width=10, warning=F}
+density.plot <- function(n,alpha,mu,sd){
+  all.data <- NULL
+  for (i in 1:length(n)){
+    data<- lapply(1:1000,FUN= function(j) my.ci(n=n[i],alpha=alpha,mu=mu,sd=sd))
+    data <- data.frame(do.call(rbind, data))
+    data$error <- data[,3]-data[,1]
+    data$size  <- paste(n[i])
+    all.data <- rbind(all.data,data)
+  } # end for loop 
+  
+  plot.title <- "Distribution of the margin of error by sample size"
+  plot.subtitle <- paste("(alpha = ",alpha, ", mean = ", mu,", sd = ",sd,")",sep="")
+    
+  library(ggplot2)
+  p <- ggplot(all.data, aes(x=error)) 
+  p <- p + geom_density(aes(group=size, colour=size, fill=size), alpha=0.3, adjust=3)
+  p <- p + xlab("Margin of error") + ylab("Density") + theme_bw()
+  p <- p + ggtitle(bquote(atop(.(plot.title), atop(italic(.(plot.subtitle)), "")))) 
+  p <- p + theme(panel.grid.major = element_blank() , panel.grid.minor = element_blank()) 
+  p
+}
+
+density.plot(n=c(10,20,30,50),alpha=0.05,mu=5,sd=3)
+```
+
+## Standard deviation and the CI
+
+```{r, echo=F, figure.align='center', fig.height=6, fig.width=10, warning=F}
+density.plot <- function(n,alpha,mu,sd){
+  all.data <- NULL
+  for (i in 1:length(sd)){
+    data<- lapply(1:1000,FUN= function(j) my.ci(n=n,alpha=alpha,mu=mu,sd=sd[i]))
+    data <- data.frame(do.call(rbind, data))
+    data$error <- data[,3]-data[,1]
+    data$sd  <- paste(sd[i])
+    all.data <- rbind(all.data,data)
+  } # end for loop 
+  
+  plot.title <- "Distribution of the margin of error by SD"
+  plot.subtitle <- paste("(alpha = ",alpha, ", mean = ", mu,", n = ",n,")",sep="")
+  
+  library(ggplot2)
+  p <- ggplot(all.data, aes(x=error)) 
+  p <- p + geom_density(aes(group=sd, colour=sd, fill=sd), alpha=0.3, adjust=3)
+  p <- p + xlab("Margin of error") + ylab("Density") 
+  p <- p + ggtitle(bquote(atop(.(plot.title), atop(italic(.(plot.subtitle)), "")))) 
+  p <- p + theme_bw()
+  p <- p + theme(panel.grid.major = element_blank() , panel.grid.minor = element_blank()) 
+
+  p
+}
+
+density.plot(n=50,alpha=0.05,mu=5,sd=c(3,4,5,6))
+```
+
+
+## Confidence level and the CI
+
+```{r, echo=F, figure.align='center', fig.height=6, fig.width=10, warning=F}
+density.plot <- function(n,alpha,mu,sd){
+  all.data <- NULL
+  for (i in 1:length(alpha)){
+    data<- lapply(1:1000,FUN= function(j) my.ci(n=n,alpha=alpha[i],mu=mu,sd=sd))
+    data <- data.frame(do.call(rbind, data))
+    data$error <- data[,3]-data[,1]
+    data$alpha  <- paste(alpha[i])
+    all.data <- rbind(all.data,data)
+  } # end for loop 
+  
+  plot.title <- "Distribution of the margin of error by alpha"
+  plot.subtitle <- paste("(sd = ",sd, ", mean = ", mu,", n = ",n,")",sep="")
+  
+  library(ggplot2)
+  p <- ggplot(all.data, aes(x=error)) 
+  p <- p + geom_density(aes(group=alpha, colour=alpha, fill=alpha), alpha=0.3, adjust=3)
+  p <- p + xlab("Margin of error") + ylab("Density") 
+  p <- p + ggtitle(bquote(atop(.(plot.title), atop(italic(.(plot.subtitle)), "")))) 
+  p <- p + theme_bw()
+  p <- p + theme(panel.grid.major = element_blank() , panel.grid.minor = element_blank()) 
+
+  p
+}
+
+density.plot(n=50,alpha=c(0.01,0.025,0.05,0.1),mu=5,sd=3)
+```
+
+## Summary
+
+- The confidence interval expresses the uncertainty in sample estimates of means, proportions, treatment efficacy etc.
+
+- Larger the sample, the narrower the CI
+
+- Can improve the probability of including the population mean by calculating 99% interval but at a cost of having a wider interval and thus greater uncertainty
+
+- Should design studies to yield CI’s that are narrow enough to draw conclusions
+
+- Interpretation depends on the assumption that the sample was representative of the population
+
+
+## Part 2: Confidence intervals for means - Practical
+
+
+1. Suppose we have a random sample of 10 recently graduated students who we asked about their mothly salary in Kenyan shillings. Imagine that this is the data we see, 94617,70606, 47594, 27026, 11078, 38898, 45033, 87151, 120514, and 40000. Estimate the mean salary of the graduated children. Find a 90 and 95 % confidence interval for the mean under the following two scenarios:
+
+- **Setting 1:** Assume that incomes are normally distributed with unknown mean and SD = Ksh 30,000.
+
+- **Setting 2:** Same problem, only now we do not know the value for the standard deviation.
+
+a) An incomplete R code is provided below, complete the code (commented lines with ??) based on the knowledge you have gathered about calculation of confidence intervals for means during the lecture.
+
+## Calculating Confidence Interval Using R
+```{r}
+
+#----------------------------------
+#  Setting 1
+#----------------------------------
+
+# input salaries
+salaries <-c(94617,70606, 47594, 27026, 11078, 38898, 45033, 87151, 120514,40000)
+n=length(salaries)  # sample size
+
+# calculate mean salary
+mean.salary <- mean(salaries)
+mean.salary
+```
+
+## 
+```{r}
+# 95% CI
+#---------------- 
+
+# significance level for 95% CI
+alpha <- 0.05  
+  
+# calculate standard error of mean salary
+se.mean.salary <- 30000/sqrt(n)
+
+# calculate the margin of error for the 95% CI
+error.margin <- abs(qnorm(alpha/2))*se.mean.salary
+
+# calculate 95% CI
+ci <- mean.salary + c(-error.margin, error.margin)
+ci
+```
+
+##
+```{r}
+# 90% CI
+#---------------- 
+
+# alpha <- ??
+# se.mean.salary <- ??
+# error.margin <- abs(qnorm(alpha/2))*se.mean.salary
+# ci  <- mean.salary + c(-error.margin, error.margin)
+# ci
+
+```
+b) Report and interpret both the 90% and 95% confidence intervals that you obtain from setting 1
+
+##
+```{r, error=T}
+#----------------------------------
+#  Setting 2
+#----------------------------------
+# input salaries
+salaries <-c(94617,70606, 47594, 27026, 11078, 38898, 45033, 87151, 120514,40000)
+n=length(salaries)  # sample size
+
+# calculate mean salary
+mean.salary <- mean(salaries)
+mean.salary
+```
+
+##
+```{r, error=T}
+# 95% CI
+#---------------- 
+
+# significance level for 95% CI
+alpha <- 0.05  
+  
+# calculate standard error of mean salary
+# se.mean.salary <- ??
+
+# calculate the margin of error for the 95% CI
+# error.margin <- abs(qt(alpha/2, df=n-1))*se.mean.salary
+# calculate 95% CI
+# ci <- mean.salary + c(-error.margin, error.margin)
+# ci
+```
+
+##
+```{r, error=T}
+# 90% CI
+#---------------- 
+# alpha <- ??
+# se.mean.salary <- ??
+# error.margin <- ??
+# ci <- mean.salary + c(-error.margin, error.margin)
+# ci
+```
+
+c) Report and interpret both the 90% and 95% confidence intervals that you obtain from setting 1
+
+d) Which if the 95% confidence intervals between setting 1 and 2 is wider and why do you think is the reason for this difference.
+
