@@ -25,7 +25,7 @@ framework   : io2012
       i)  using the Wald test
       ii)  using the Likelihood Ratio Test
 
-4) Models with more than one explanatory variable 
+4) Models with more than one explanatory variable  
 
 5) Interaction/Effect Modification using logistic regression models
 
