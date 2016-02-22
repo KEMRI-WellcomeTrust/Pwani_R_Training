@@ -353,6 +353,9 @@ anova(m0,m1,test="LRT") # Compare the two LLs using anova
 "... the protective effect of breastfeeding against infectious diseases in early infancy is more pronounced among infants living in poor environmental conditions than among those living in areas with adequate water supply and sanitation facilities" Kirkwood & Sterne _ibid_
 
 ## Interaction example
+
+Data from a survey from 1974 / 1975 asking both female and male responders about their opinion on the statement: Women should take care of running their homes and leave running the country up to men.
+
 ```{r }
 data("womensrole", package = "HSAUR2")
 fm1 <- cbind(agree, disagree) ~ gender + education
