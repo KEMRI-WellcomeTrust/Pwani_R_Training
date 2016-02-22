@@ -127,8 +127,8 @@ Data
 
 Microfilariae Infection  | Savannah | Forest | Total |
 -------------------------|----------|--------|-------|
-Positive                 |  267     |   213  | 480   |
-Negative                 |  281     |   541  | 822   | 
+Negative                 |  267     |   213  | 480   |
+Positive                 |  281     |   541  | 822   | 
 Total                    |  548     |   754  | 1302  |
 
 Calculate the prevalence, odds and log odds of Microfilariae infection in the forest and savannah areas, and fill the table below.
