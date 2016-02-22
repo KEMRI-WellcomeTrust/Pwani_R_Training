@@ -1,0 +1,127 @@
+---
+title: "Testing for Differences: One sample, Independent Samples and Paired Samples t-tests"
+author: "Boniface Karia"
+date: "February 17, 2016"
+
+output: 
+  beamer_presentation:
+   theme: "CambridgeUS"
+   colortheme: "sidebartab"
+framework: io2012
+---
+## Objectives: 
+- Recognise when to use a one sample t-test, independent samples t-test, paired samples t-test; 
+\newline
+- Explain and check the assumptions and conditions for each test; 
+\newline
+- Run and interpret a 'One sample t-test' to show a sample mean is different from some hypothesised value;
+\newline
+- Run and interpret an ‘independent samples t-test’ to show the difference between two groups on one attribute; 
+\newline
+- Run and interpret a ‘paired samples t-test’ to show the difference between two attributes as assessed by one sample
+\newline
+
+## One Sample t-test
+\textbf {Hypothesis Testing for a Single Population Mean};
+\newline
+- The One-Sample T Test compares the mean score of a sample to a known value. Usually, the known value is a population mean. 
+\newline
+```{r, echo=F}
+library(png)
+library(grid)
+img <- readPNG("onesample.png")
+grid.raster(img)
+```
+
+## Assumptions and Conditions
+- Independence Assumption
+The data values should be independent. 
+\newline
+- Randomisation Condition
+The data arise from a random sample.
+\newline
+- 10% Condition
+The sample size should be no more than 10% of the population.
+\newline
+- Normal Population Assumption
+The data should be from a population that follows a normal model.
+\newline
+\textbf {Why do we need to ensure the data is not extremely skewed?}
+\newline
+\textbf {How can we check these assumptions?}
+
+## Example: One Sample t-test 
+The mean yield for a certain crop is 8 kg/m2. This year, a new pesticide was applied and the yield from nine randomly selected plots are:
+\newline
+\textbf {9.3  8.2	7.9	8.8	9.4	8.6	8.9	9.5	9.0 }
+\newline
+Any evidence that yield has increased?
+- Test the Ho: µ = 8.0 against Ha: µ >8.0
+\newline
+We create a simple vector of yield using the function c()
+
+```{r}
+yield<-c(9.3,8.2,7.9,8.8,9.4,8.6,8.9,9.5,9.0) # create an object ‘yield’
+yield  	 # to show contents of object ‘yield’
+
+```
+
+## Exploring the data
+Before undertaking any statistical analysis it is good to explore the data. We start with numerical summaries. 
+```{r}
+summary(yield)  # to summarise the variable ‘yield’
+```
+What is the estimated mean yield from the sample? ………
+\newline Before we do the t-test we check the distribution of the data using histogram, boxplot, normal qqplot or stem and leaf.
+
+##
+```{r results='hide', echo=FALSE}
+par(mfrow=c(2,2))				#multifigure display for the graphs
+hist(yield, main="Yield of crop")  	#histogram of yield plus main title
+boxplot(yield, ylab="Yield of crop") #boxplot with y axis title 
+qqnorm(yield, main="Normal Q-Q plot for Yield", ylab="Yield")#normal 
+										  plot
+qqline(yield) 			# adding a line onto the normal plot
+```
+\newline
+What is your comment regarding the normality assumption on the data?
+
+## Cont
+Finally, we might want a more formal test of agreement with normality (or not). R provides
+the Shapiro-Wilk test:
+
+```{r results='hide', message=FALSE}
+shapiro.test(yield) # do a Shapiro-Wilk test on ‘yield’
+```     
+Alternatively, we use the Kolmogorov-Smirnov test using ks.test() function
+```{r results='hide', message=FALSE}
+ks.test(yield, "pnorm", mean = mean(yield),
+        sd = sqrt(var(yield)))
+```
+- Here we are testing the null hypothesis: the data are sampled from the normal distribution. What is your comment on the test results?
+\newline
+- Note: Use normality tests with caution:
+\newline  
+- Let us perform the one sample t-test on the data ‘yield’ specifying the alternative hypothesis is “greater” as follows:
+
+## Cont 
+```{r}
+t.test(yield,mu=8,alt="greater") 
+# specify hypothesized mean mu=8
+ #by default alternative is 2-sided 
+```                   
+
+## Cont
+To get the standard error of yield
+```{r results='hide', message=FALSE}
+stderror<-sqrt((var(yield)/length(yield)))# I have simply calculated
+```
+Comments: The test suggests the mean yield has significantly increased to 8.84 (±0.18) kg (t = 4.68, p = 0.0008). Note the 95% confidence interval does not give upper limit – why?
+
+
+
+
+
+
+
+

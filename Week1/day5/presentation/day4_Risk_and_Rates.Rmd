@@ -1,0 +1,251 @@
+---
+title: "Risk and Rates"
+author: "Mark Otiende"
+date: "January 28, 2016"
+output: beamer_presentation
+header-includes:
+ \usetheme{Boadilla}
+ \usecolortheme{beaver}
+
+---
+
+
+# Session Objectives 
+By the end of this session you should be able to:
+
+- Distinguish between prevalence, incidence risk and incidence rate.\vspace{10 mm}
+- Calculate prevalence, incidence risk, incidence rate and person time.\vspace{10 mm}
+- Calculate and interpret confidence intervals for incidence rates.\vspace{10 mm}
+- Select the appropriate meassures of occurrence for different contexts.
+
+# Overview of Study Designs
+
+```{r fig.width=3.5, fig.height=10, fig.align='center', echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("/MYDATA/Reports/KWTRP_Intro_To_Stats/notes/EpiStudies.png")
+grid.raster(img)
+```
+
+
+# Overview of Measures of Occurence
+There are two main measures ofoccurence used in epidemiology:
+
+```{r fig.width=3, fig.height=10,echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("/MYDATA/Reports/KWTRP_Intro_To_Stats/notes/Measures_of_Occurence.png")
+ grid.raster(img)
+```
+
+- Prevalence - concerned with quantifying the number of existing cases in a population at a designated time. \vspace{5 mm}
+
+
+- Incidence - concerned with quantifying the frequency of occurrence of new cases in a defined population, arising during a given time period
+
+
+
+
+# Prevalence 
+
+1. Point Prevalence - proportion of persons in a defined population that has the outcome under study at a specific point in time and is calculated as 
+
+\begin{equation}
+Point\hspace{1 mm}Prevalence=\frac{Number\hspace{1 mm}of\hspace{1 mm}cases\hspace{1 mm}at\hspace{1 mm}time\hspace{1 mm}t} {Study\hspace{1 mm}population\hspace{1 mm}at\hspace{1 mm}time\hspace{1 mm}t}
+\end{equation}
+
+2. Period Prevalence - 
+
+# Prevalence
+## Example 1:
+In a survey to assess cigarette smoking among young people aged 13-24 in Kilifi as at 1st November 2014, 500 individuals out of a sample of 1496 agreed to have smoked at least one cigarette in the past 2 weeks.
+The prevalence of cigarette smoking on November 1, 2014 was: \vspace{10 mm}
+
+
+```{r fig.width=.5, fig.height=.5, fig.align='center', echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("/MYDATA/Reports/KWTRP_Intro_To_Stats/notes/thinking.png")
+grid.raster(img)
+```
+
+
+
+# Incidence
+**Incidence Risk (r)** 
+
+the proportion of new cases that occur in a population initialy free of the condition during specified period of time
+    
+\begin{equation}
+r=\frac{no.\hspace{1 mm}of\hspace{1 mm}new\hspace{1 mm}cases\hspace{1 mm}in\hspace{1 mm}time\hspace{1 mm}period\hspace{1 mm}t}  {Population\hspace{1 mm}at\hspace{1 mm}risk\hspace{1 mm}at\hspace{1 mm}start\hspace{1 mm}of\hspace{1 mm}period}
+\end{equation}
+
+# Incidence
+**Incidence Risk** 
+
+## Example 2:
+In a study of neonatal causes of death, 10 out of 189 died during the 1 month follow-up period. Calculate the risk of death for these newborns. \vspace{10 mm}
+
+```{r fig.width=.5, fig.height=.5, fig.align='center', echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("/MYDATA/Reports/KWTRP_Intro_To_Stats/notes/thinking.png")
+grid.raster(img)
+```
+
+
+# Incidence
+**Incidence Rate** 
+
+relates the number of new cases to the total *person-time* at risk 
+
+\begin{equation}
+Incidence\hspace{1 mm}Rate,\lambda =\frac{Number\hspace{1 mm}of\hspace{1 mm}new\hspace{1 mm}cases}  {Total\hspace{1 mm}persontime\hspace{1 mm}at\hspace{1 mm}risk}=\frac{d} {T}
+\end{equation}
+
+where *person-time* is calculated as
+\begin{equation}
+Persontime\hspace{1 mm}in\hspace{1 mm}years=\frac{exit\hspace{1 mm}date-entry\hspace{1 mm}date}  {365.25}
+\end{equation}
+
+
+# Incidence
+**Incidence Rate** 
+
+## Example 3:
+By the end of a 13-year follow-up diabetes study, 250 out of 4000 developed diabetes. The total time of observation was 40000 person-years.
+What is the incidence of diabetes in this poulation? \vspace{10 mm}
+
+```{r fig.width=.5, fig.height=.5, fig.align='center', echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("/MYDATA/Reports/KWTRP_Intro_To_Stats/notes/thinking.png")
+grid.raster(img)
+```
+
+
+
+# Incidence
+**Incidence Rate** 
+
+## Confidence interval for a rate
+
+\begin{equation}
+s.e\hspace{1 mm}(log\hspace{1 mm}rate)=\frac{1}  {\sqrt{d} }
+\end{equation}
+
+\begin{equation}
+95\%\hspace{1 mm}CI\hspace{1 mm}for\hspace{1 mm}log\hspace{1 mm}rate=log\hspace{1 mm}rate\pm1.96\times\frac{1}  {\sqrt{d}}
+\end{equation}
+
+
+\begin{equation}
+95\%\hspace{1 mm}CI\hspace{1 mm}for\hspace{1 mm}rate=\frac{rate} {exp(1.96/\sqrt{d})}  \hspace{3 mm} to \hspace{3 mm} rate\times\exp(1.96/\sqrt{d})
+\end{equation}
+
+# Overview of Study Designs
+
+```{r fig.width=3.5, fig.height=10, fig.align='center', echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("/MYDATA/Reports/KWTRP_Intro_To_Stats/notes/EpiStudies.png")
+grid.raster(img)
+```
+
+
+# Comparing Rates
+
+- The rates of disease in two exposure groups may be compared using two different measures:  __rate difference__ and __rate ratio__
+
+- Example to work with is the child deaths data which contains the variables: date of birth, date of death, sex, location of death, status and mothers' education level
+
+
+# Rate Difference
+
+|Gender                   |Number of Deaths|  Person Years     |Rate/1000child yrs |       
+|-------------------------|----------------|-------------------|-------------------|           
+| female                  | 21             | 1148.698          |   18.28157        |
+| Male                    | 20             | 1162.845          |   17.1992         |
+| **Total**               | **41**         | **2311.543**      |   **35.48077**    |
+
+
+- The __rate difference__ comparing the female with male deaths is $18.28157-17.1992=1.082363$ deaths per 1000 child-years
+
+
+# Standard Error 
+
+- The starndard error of a rate difference is given by
+
+$$ s.e (rate \hspace{0.08in} difference)=\sqrt{\frac{d_1}{T^2_1} + \frac{d_0}{T^2_0}}$$
+
+- Hence in the example, the standard error is:
+
+$$ s\hspace{0.08in}. \hspace{0.08in} e=\sqrt{\frac{d_1}{T^2_1} + \frac{d_0}{T^2_0}} = \sqrt{ \frac{21}{1148.698^2} + \frac{20}{1162.845^2} }\hspace{0.2in} X \hspace{0.2in}1000 $$
+
+$$ = \hspace{0.08in} approx \hspace{0.08in} 5.5 \hspace{0.08in} deaths \hspace{0.08in} per \hspace{0.08in} 1000 \hspace{0.08in} child-years $$
+
+
+# Rate Difference: Confidence Interval
+
+- The 95% confidence interval is:
+
+$$1.082363 \pm 1.96 X 5.5$$
+
+$$( -9.7,11.9)$$
+
+- __Conclusion__: With 95% confidence, mortality rate of female children exceeds that of male children by between  -9.7 to 11.9 deaths per 1000 child-years.
+
+
+# Rate Ratios
+
+- The analysis of rates is usually done using rate ratios rather than rate differences.
+
+- The rate ratio is defined as:
+
+$$Rate \hspace{0.08in} Ratio= \frac{rate \hspace{0.08in} in \hspace{0.08in}group}{rate \hspace{0.08in} in \hspace{0.08in} unexposed} = \frac{\lambda_1}{\lambda_0}=\frac{\frac{d_1}{T_1}}{\frac{d_0}{T_0}}=\frac{d_1  X T_0}{d_0 X T_1}$$
+
+- We use the starndard error of the log rate ratio to derive confidence intervals and test of the null hypothesis of no difference between rates in any two groups.
+
+
+# Rate Ratio Standard Error and CI
+
+- The starndard error is given by:
+
+$$ s.e \hspace{0.08in} of \hspace{0.08in} log(rate ratio)= \sqrt{\frac{1}{d_1}+\frac{1}{d_0}} $$
+
+- The 95% confidence interval for the rate ratio is: 
+
+$$ 95 \% \hspace{0.08in} CI= \frac {rateratio}{EF}\hspace{0.08in} to \hspace{0.08in} rateratio \hspace{0.08in} X \hspace{0.08in}EF$$
+
+
+
+$$ EF=exp[1.96 \hspace{0.08in} X \hspace{0.08in} s.e.\hspace{0.08in} of \hspace{0.08in} log(rateratio)]$$
+
+# Example 1 (contd...)
+
+$$ rateratio=\frac{\frac{21}{1148.698}}{\frac{20}{1162.845}}=1.06$$
+
+$$s.e log(rateratio)=\sqrt{\frac{1}{20} + \frac{1}{21}}= 0.31$$
+
+And the 95% error factor is given by:
+
+$$ 95\% EF= exp(1.96 X 0.31)=1.84$$
+
+# Example: Conclusion
+
+This gives a confidence interval of:
+
+$$(\frac{1.06}{1.84},\hspace{0.08in} 1.06 X 1.84) \hspace{0.08in}= \hspace{0.08in} (0.58, \hspace{0.08in} 1.95) $$
+
+__Conclusion:__ The mortalirty rate  among female children is between 0.58 and 1.95 times the rate among male children.
+
+
+# 
+\begin{center}
+Practical R session
+\end{center}
+
+
+
+
+
