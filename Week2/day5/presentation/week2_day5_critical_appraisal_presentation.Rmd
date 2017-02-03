@@ -1,8 +1,8 @@
 ---
 title: "Critical Appraisal of Research Papers/Reports"
 author: |
-  | Introduction to Statistics Course
-  | Feb 25th, 2016
+  | Pwani R Training
+  | Feb 24th, 2017
   | Presenter: John Ojal
 output:
   beamer_presentation:
