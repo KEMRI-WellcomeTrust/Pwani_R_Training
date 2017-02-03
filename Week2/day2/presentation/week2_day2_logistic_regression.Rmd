@@ -1,13 +1,13 @@
 ---
 title: "Logistic Regression"
 subtitle: "Analysis of Categorical outcome data"
-author: "John Ojal and Emily Odipo"
+author: "John Ojal, Emily Odipo, Azraa"
 institution : KEMRI/Wellcome Trust Research Programme
 output:
   beamer_presentation:
     theme: "CambridgeUS"
     colortheme: "sidebartab"
-date: "Tuesday, February 17, 2015"
+date: "21st Feb 2017"
 framework   : io2012
 
 ---
